@@ -28,6 +28,7 @@ module.exports = {
     let { password, nickname } = userInfo;
     let salt = await asyncify(bcrypt.genSalt)(10);
     password = await asyncify(bcrypt.hash)(password, salt);
+    console.log(userInfo, 'userInfo')
     // 先暂时随机一个数
     let account = genAccount();
     let user = await User.create({

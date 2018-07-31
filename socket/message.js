@@ -13,7 +13,7 @@ module.exports = function(socket) {
       cb(resSend(err));
     })
   });
-  // 拉取私聊房间信息的
+  // 拉取私聊房间的
   socket.on('getPrivateRoomInfo', (info, cb) => {
     parseToken(info).then(async info => {
       let rs = await private.getPrivateInfo(info);
@@ -51,5 +51,6 @@ module.exports = function(socket) {
     }).catch(err => {
       cb(resSend(err));
     })
-  })
+  });
+ 
 }

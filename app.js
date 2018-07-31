@@ -11,8 +11,7 @@ var db = require('./models/db-server');
 var User = require('./models/db-user');
 var Room = require('./models/db-room');
 
-
-
+var upload = require('./routes/upload')
 
 var app = express();
 
@@ -27,9 +26,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/chats', express.static(path.join(__dirname, 'dist')));
 
-// app.use('/chat', tokenAuthen);
+// var multer = require('multer');
+// var uploads = multer()
+// var single = uploads.any();
+app.use('/upload', upload);
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

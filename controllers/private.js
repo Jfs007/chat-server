@@ -85,7 +85,7 @@ module.exports = {
     })
     return resSend({data: privateList})
   },
-  // 拉取私聊房间信息
+  // 根据id拉取私聊房间信息
   async getPrivateInfo(info) {
     let { id } = info;
     let user = await User.findOne({
