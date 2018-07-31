@@ -14,8 +14,6 @@ var Room = require('./models/db-room');
 
 
 
-
-
 var app = express();
 
 // view engine setup
