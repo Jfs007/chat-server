@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+  <title>Test</title>
+</head>
+<body>
+  <h1>测试上传</h1>
+  <input type="file"  id="file">
+  <form action="/upload/avatar" method="post">
+    <input type="text" name="aa" value="aaa">
+
+    <input type="submit">
+  </form>
+</body>
+</html>
+<script>
+  file.onchange = function(e){
+  console.log(e, 'e...')
+  let file = e.target.files[0];
+  let formData = new FormData()
+  formData.append('avatar', file);
+  $.ajax({
+    url: '/upload/avatar',
+    type: 'POST',
+    processData: false,                // jQuery不要去处理发送的数据
+    contentType: false,  
+    // contentType: "multipart/form-data",
+    // cache: false,           
+    data: formData, 
+    success(ret) {
+      console.log(ret)
+    }
+  })
+}
+
+
+</script>
