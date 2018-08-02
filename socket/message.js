@@ -13,6 +13,10 @@ module.exports = function(socket) {
       cb(resSend(err));
     })
   });
+  // 获取某个群聊的消息记录
+  socket.on('getRoomMsg', (info, cb) => {
+    
+  });
   // 拉取私聊房间的
   socket.on('getPrivateRoomInfo', (info, cb) => {
     parseToken(info).then(async info => {
@@ -21,9 +25,14 @@ module.exports = function(socket) {
     }).catch(err => {
       cb(resSend(err));
     })
+  });
+  // 拉取非私聊房间消息
+  socket.on('getRoomInfo', (info, cb) => {
+
   })
+
   // 读取消息
-  socket.on('readMsg', (info, cb) => {
+  socket.on('readPrivateMsg', (info, cb) => {
     parseToken(info).then(async info => {
       let rs = await private.readMsg(info);
       // socket
@@ -38,7 +47,7 @@ module.exports = function(socket) {
       let to = info.to;
       let rs = await private.savePrivateMsg(info);
       // 发送消息到用户 
-      socket.to(to).emit('message', rs);
+      socket.to(to).emit('message.private', rs);
       cb(rs);
     }).catch(err => {
       cb(resSend(err));

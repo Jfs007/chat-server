@@ -1,7 +1,11 @@
 const FriendAdd = require('../models/db-friendadd');
 const Friend = require('../models/db-linkman');
-const Private = require('../models/db-private')
+const Private = require('../models/db-private');
+const Room = require('../models/db-room');
+const User =require('../models/db-user');
+const room = require('./room');
 const { resSend } = require('../util/misc');
+const RoomHistory = require('../models/db-roomhistory')
 module.exports = {
   // 好友同意通知
   async friendAgreeNotice(info, socket) {
@@ -30,10 +34,43 @@ module.exports = {
         timestamp: Date.now()
       }),
     ]);
-    socket.to(from).emit('message', resSend({ data: fromMsg }));
-    socket.to(to).emit('message', resSend({ data: toMsg }));
+    socket.to(from).emit('message.private', resSend({ data: fromMsg }));
+    socket.to(to).emit('message.private', resSend({ data: toMsg }));
     // return resSend({data: { fromMsg, toMsg }})
+  },
+  // 加入默认房间
+  async joinPresetRoom(userid, socket) {
+    let [tRoom, tUser] = await Promise.all([
+      Room.findOne({
+        name: '风继续吹'
+      }),
+      User.findOne({
+        _id: userid
+      })
+    ]);
+    let roomid = tRoom._id;
+    // 如果在了不再加入
+    if (tUser.rooms.includes(''+roomid)) return resSend();
+    let rs = await room.joinRoom({
+      userid,
+      roomid
+    });
+    let nickname = tUser.nickname;
+    let history = await RoomHistory.create({
+      roomid: roomid,
+      creater: userid,
+      // xxx 加入了本群
+      content: nickname,
+      msgType: 1
+    });
+    // 接受群聊
+    socket.join(roomid);
+    // 推送昂消息
+    socket.broadcast.to(roomid).emit('message.room', resSend({ data: history }));
+    resSend({data: rs});
   }
+
+  
 
 
 }

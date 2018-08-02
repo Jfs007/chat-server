@@ -1,30 +1,23 @@
 /**
- * 私聊的消息
+ * 群聊天记录
  * 
  * 
  */
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const private = new Schema({
+const roomhistory = new Schema({
   // 消息主体
   content: String,
-
-  // 一条消息需要保存两份，，所以再保留一个创建者发送者id，，user，friend分别给两个人
-  // 消息创建者
+  // 消息发送者
   creater: {
     type: Schema.Types.ObjectId,
     ref: 'user'
   },
-  // 用户的id
-  user: {
+  // 房间的id
+  roomid: {
     type: Schema.Types.ObjectId,
-    ref: 'user'
-  },
-  // 盆友的id
-  friend: {
-    type: Schema.Types.ObjectId,
-    ref: 'user'
+    ref: 'room'
   },
   // 消息状态管理 0 未读 1 已读 2 删除
   status: {
@@ -47,4 +40,4 @@ const private = new Schema({
   },
   timestamp: Number
 });
-module.exports = mongoose.model('private', private);
+module.exports = mongoose.model('roomhistory', roomhistory);

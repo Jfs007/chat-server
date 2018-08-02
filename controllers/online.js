@@ -9,12 +9,13 @@
    async onLine(info) {
     let { token, socket, device } = info;
     let id = token._id;
-     console.log(socket.id, 'onLine');
+     
      let [online, user] = await Promise.all([
       // 创建上线 
       Online.create({ socket: socket.id, user: id }),
       User.findOne({ _id: id })
     ]);
+    console.log(user.nickname, '上线...');
     user.device = device;
     user.onlineDevice++
     user.save();
@@ -45,7 +46,7 @@
     
     user.onlineDevice--;
     user.lastOnlineTime = Date.now();
-     console.log(user.lastOnlineTime, '....')
+     console.log(user.nickname, '下线....')
     // 不await直接处理掉
     user.save();
     return resSend({ data: { friends, userid } });

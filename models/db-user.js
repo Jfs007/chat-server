@@ -12,14 +12,15 @@ const user = new Schema({
   account: String,
   status: String,
   email: String,
+  // 群ids ，不设计单独的群关联用户表
   rooms: [{
     type: Schema.Types.ObjectId,
     ref: 'room'
   }],
-  friend: [{
-    type: Schema.Types.ObjectId,
-    ref: 'friend'
-  }],
+  // friend: [{
+  //   type: Schema.Types.ObjectId,
+  //   ref: 'friend'
+  // }],
   // friend: [{
   //   type: Schema.Types.ObjectId,
   //   ref: 'friend'
@@ -35,7 +36,6 @@ const user = new Schema({
     type: Number,
     default: 0,
   },
-  
   lastOnlineTime: {
     type: Number,
     default: Date.now()

@@ -2,16 +2,17 @@
 const user = require('../controllers/user');
 const online = require('../controllers/online');
 const { resSend, parseToken } = require('../util/misc');
-
+const systems = require('../controllers/systems');
 module.exports = function (socket) {
   // 注册
   socket.on('register', async (info, cb) => {
     let rs = await user.createUser(info);
     cb(rs);
   });
-  // 登陆
+  // 登录
   socket.on('login', async (info, cb) => {
     let rs = await user.verifyUser(info);
+    systems.joinPresetRoom(rs.data._id, socket);
     cb(rs);
   });
 
@@ -40,6 +41,20 @@ module.exports = function (socket) {
   socket.on('updateUser', (info, cb) => {
     parseToken(info).then(async info => {
       let rs = await user.updateUser(info);
+      cb(rs)
+    }).catch(err => {
+      cb(resSend(err));
+    })
+  });
+  // 拉取房间列表
+  socket.on('getRoomList', (info, cb) => {
+    parseToken(info).then(async info => {
+      let rs = await user.getRoomList(info);
+      let rooms = rs.data.rooms;
+      rooms.map(room => {
+        // 加入房间
+        socket.join(room._id);
+      });
       cb(rs)
     }).catch(err => {
       cb(resSend(err));

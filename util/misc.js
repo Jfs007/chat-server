@@ -2,6 +2,13 @@
 const { JWT_KEY } = require('../conf/common-conf');
 const jwt = require('jsonwebtoken');
 module.exports = {
+  /**
+   * 转化为async 函数 (参照bluebird api:  promiseify)
+   * @param {*} fn 该函数要求 接受的最后一个参数为回调函数 回调函数接受error 和 data
+   * 接受函数 => fn = function([arg...], function(err, data) {}) {}
+   * 转化为async函数 asyncify(fn)([arg...])
+   * 
+   */
   asyncify(fn) {
     return async function(...args) {
       return new Promise(( resolve, reject ) => {

@@ -1,4 +1,4 @@
-// 好友请求/添加表
+// 好友请求/群添加表
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 const friendadd = new Schema({

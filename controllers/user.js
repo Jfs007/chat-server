@@ -1,9 +1,10 @@
 const User = require('../models/db-user');
-const Friend = require('../models/db-linkman')
-const { asyncify, errorinfo, genAccount, resSend } = require('../util/misc');
+const Friend = require('../models/db-linkman');
+const Room = require('../models/db-room')
+const { asyncify, genAccount, resSend } = require('../util/misc');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { JWT_KEY, SOURCE_ADDRESS, AVATAR_PATH } = require('../conf/common-conf');
+const { JWT_KEY, SOURCE_ADDRESS, AVATAR_PATH, QN_AVATAR_STYLE } = require('../conf/common-conf');
 module.exports = {
   // 验证用户
   async verifyUser(userInfo) {
@@ -17,7 +18,7 @@ module.exports = {
     if(isMatch) {
       let exp = Math.floor((new Date().getTime()) / 1000) + 30*3600;
       let verify = jwt.sign({ user: user.account, exp: exp, _id: user._id }, JWT_KEY);
-      return resSend({ data: { token: verify } });
+      return resSend({ data: { token: verify, _id: user._id } });
     }else {
       return resSend({message: '密码或者用户名错误', code: -1});
     }
@@ -28,7 +29,6 @@ module.exports = {
     let { password, nickname } = userInfo;
     let salt = await asyncify(bcrypt.genSalt)(10);
     password = await asyncify(bcrypt.hash)(password, salt);
-    console.log(userInfo, 'userInfo')
     // 先暂时随机一个数
     let account = genAccount();
     let user = await User.create({
@@ -40,12 +40,13 @@ module.exports = {
     await user.save();
     return resSend({
       data: {
-        account: user.account
+        account: user.account,
+        _id: user._id
       }
     })
   },
   
-  // 拉取用户信息 登陆 -->
+  // 拉取用户信息 
   async getUserInfo(info) {
     let { account, id, token } = info;
     let condi = account ? { account }: { _id: id };
@@ -79,12 +80,35 @@ module.exports = {
         nickname: info.nickname,
         sex: info.sex,
         birthday: info.birthday,
-        avatar: info.avatar,
         signature: info.signature
       }
     });
-    return resSend();
+    return resSend({ data: user });
   },
+  async uploadAvatar(info) {
+    let { token, avatar } = info;
+    let userid = token._id;
+    let user = await User.update({
+      _id: userid
+    }, {
+        $set: {
+          avatar: `${avatar}?${QN_AVATAR_STYLE}&date=${Date.now()}`,
+        }
+    });
+    return resSend({ data: { avatar, id: userid } })
+  },
+  // 用户群聊房间列表
+  async getRoomList(info) { 
+    let { token } = info;
+    let userid = token._id;
+    
+    let user = await User.findOne({
+      _id: userid
+    }).populate({
+      path: 'rooms'
+    });
+    return resSend({ data: { rooms: user.rooms }} )
+  }
   // 是否是好友
   // async is
 

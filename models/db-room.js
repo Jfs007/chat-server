@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-
+const { SOURCE_ADDRESS, AVATAR_PATH } = require('../conf/common-conf');
 const Schema = mongoose.Schema;
 const room = new Schema({
   name: {
@@ -23,7 +23,12 @@ const room = new Schema({
   createdAt: {
     type: Date,
     default: Date.now()
+  },
+  avatar: {
+    type: String,
+    default: SOURCE_ADDRESS + AVATAR_PATH + 'avatar5' + '.png'
   }
+
 });
 module.exports = mongoose.model('room', room);
 

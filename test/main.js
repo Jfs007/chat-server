@@ -1,5 +1,6 @@
 // 开启数据库
 require('../models/db-server');
+const User =  require('../models/db-user');
 const jwt = require('jsonwebtoken');
 const { JWT_KEY } = require('../conf/common-conf');
 function parseToken(info) {
@@ -14,7 +15,16 @@ function parseToken(info) {
 }
 
 let { createUser, verifyUser, getUserInfo, getUser } = require('../controllers/user');
+User.updateMany({
+  // _id: '5b4ac772f56100c804970033'
+}, { $set: { rooms: ['5b62670e22e34d1706506ae0'] } }).then(res => {
+  console.log(res)
+}).catch(err => {
+  console.log(err)
+})
 
+
+// createUser({password: 'sjd', nickname: 'd......'});
 // 创建用户
 // for(let i = 0; i< 10; i++) {
 //   createUser({ password: 'sjf1996', nickname: 'tom'+ i });
@@ -41,12 +51,12 @@ let { createUser, verifyUser, getUserInfo, getUser } = require('../controllers/u
 //   );
 
 
-getUser({
-  keyword: '64491167090'
-})
-.then(ret => {
-  console.log(ret, 'ret')
-})
+// getUser({
+//   keyword: '64491167090'
+// })
+// .then(ret => {
+//   console.log(ret, 'ret')
+// })
 
 
 

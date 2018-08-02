@@ -26,11 +26,11 @@ let { savePrivateMsg, getPrivateList } = require('../controllers/private');
 // })
 
 getPrivateList( { 
-  limit: 3,
+  limit: 10,
   token: {
-    _id: '5b489bb7b89c53acf9a04376'
+    _id: '5b4ac722f56100c80497002e'
   },
-  to: '5b489bb7b89c53acf9a04375'
+  to: '5b5c852cfe877a58156f1731'
 }).then((ret) => {
   console.log(ret)
 })

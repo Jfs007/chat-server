@@ -10,6 +10,7 @@
  */
 let Private = require('../models/db-private');
 let User = require('../models/db-user')
+let Friend = require('../models/db-linkman')
 const { resSend } = require('../util/misc');
 module.exports = {
   // 更新读消息 
@@ -17,7 +18,6 @@ module.exports = {
     let { to, token } = info;
     // timestamp = timestamp || Date.now();
     let from = token._id;
-    console.log(to, from, 'form')
     // 所有未读的更新为已读
     await Private.updateMany({
       user: from,
@@ -63,6 +63,7 @@ module.exports = {
   },
   // 私聊消息列表
   async getPrivateList(info) {
+    // token 时间戳 私聊对象id 限制条数
     let { token, timestamp, to, limit } = info;
     timestamp = timestamp || Date.now();
     limit = limit || 10;
@@ -71,30 +72,44 @@ module.exports = {
       $or: [{ creater: from }, { creater: to }],
       user: from,
       friend: to,
-      timestamp: { '$lt': timestamp }
+      // 获得小于传入的时间戳的数据
+      timestamp: { '$lt': timestamp },
     }, null, 
-    // 根据id降序
-      { sort: '-_id', limit }
-    )
-    .populate({
-      path: 'user',
-      // select: '_id nickname avatar account'
-    }).populate({
-      path: 'friend',
-      // select: '_id nickname avatar account'
+    // 根据id降序，获取limit条数目的数据
+    { 
+      sort: '-_id', 
+      limit
+    }).then((info) => {
+      // 反序
+      return info.reverse();
     })
+    // .populate({
+    //   path: 'user',
+    //   // select: '_id nickname avatar account'
+    // }).populate({
+    //   path: 'friend',
+    //   // select: '_id nickname avatar account'
+    // })
     return resSend({data: privateList})
   },
   // 根据id拉取私聊房间信息
   async getPrivateInfo(info) {
-    let { id } = info;
-    let user = await User.findOne({
-      _id: id
-    }
-    // 'avatar nickname _id ' 
-    );
+    let { id, token } = info;
+    let userid = token._id;
+    // let user = await User.findOne({
+    //   _id: id
+    // }
+    // // 'avatar nickname _id ' 
+    // )
+
+    let frined = await Friend.findOne({
+      owner: userid,
+      friend: id
+    }).populate({
+      path: 'friend'
+    });
     return resSend({
-      data: user
+      data: frined
     })
   },
   async getUnReadPrivate(info) {
