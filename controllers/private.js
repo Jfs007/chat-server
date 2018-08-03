@@ -35,8 +35,9 @@ module.exports = {
 
   // 保存消息数据
   async savePrivateMsg(info) {
-    let { to, token, content } = info;
+    let { to, token, content, type } = info;
     let from = token._id;
+    type = type || 'text'
     // 保留两份数据
     let [fromMsg, toMsg] = await Promise.all([
       Private.create({
@@ -46,6 +47,7 @@ module.exports = {
         // 发送者消息状态 已读
         status: 1,
         content,
+        type,
         timestamp: Date.now()
       }),
       Private.create({
@@ -55,6 +57,7 @@ module.exports = {
         // 接收者消息状态 未读
         status: 0,
         content,
+        type,
         timestamp: Date.now()
       }),
     ]);

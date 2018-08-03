@@ -25,7 +25,11 @@ module.exports = function(socket) {
   });
   // 用户下线
   socket.on('offline', async (info, cb) => {
-    let rs = await online.offLine({ socket });
-    cb(rs);
+    try {
+      let rs = await online.offLine({ socket });
+      cb(rs);
+    } catch (error) {
+      cb(resSend({message: error, code: -1}));
+    }
   });
 }

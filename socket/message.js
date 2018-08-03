@@ -26,10 +26,7 @@ module.exports = function(socket) {
       cb(resSend(err));
     })
   });
-  // 拉取非私聊房间消息
-  socket.on('getRoomInfo', (info, cb) => {
 
-  })
 
   // 读取消息
   socket.on('readPrivateMsg', (info, cb) => {

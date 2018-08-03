@@ -4,15 +4,17 @@ const User = require('../models/db-user')
 module.exports =  {
   // 保存群聊天记录 
   async saveRoomHistory(info) {
-    let { token, roomid, content } = info;
+    let { token, roomid, content, type } = info;
     let userid = token._id;
+    
     let [history, user] = await Promise.all([
       RoomHistory.create({
         creater: userid,
         roomid,
         content,
         timestamp: Date.now(),
-        createAt: new Date()
+        createAt: new Date(),
+        type
       }),
       User.findOne({
         _id: userid

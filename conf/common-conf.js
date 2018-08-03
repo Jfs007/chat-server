@@ -2,7 +2,7 @@ module.exports = {
   JWT_KEY: '我爱一条柴',
   SOURCE_ADDRESS: 'http://pcla4klcm.bkt.clouddn.com/',
   AVATAR_PATH: 'image/avatar/',
-  
+  SOURCE_PATH: 'file/',
   QN_AK: 'a5aMrh_Lfvab2sN5L9onimW4tbqdR8ayFEa5E8fD',
   QN_SK: 'LjMS8DNdHE32w3tBQxPtXV5QA9Eu8WLXIWEo_zy1',
   // 七牛头像样式

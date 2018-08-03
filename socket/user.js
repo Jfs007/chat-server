@@ -12,7 +12,7 @@ module.exports = function (socket) {
   // 登录
   socket.on('login', async (info, cb) => {
     let rs = await user.verifyUser(info);
-    systems.joinPresetRoom(rs.data._id, socket);
+    if(rs.code!== -1) systems.joinPresetRoom(rs.data._id, socket);
     cb(rs);
   });
 

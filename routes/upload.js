@@ -35,11 +35,39 @@ router.post('/avatar', any, async function (req, res, next) {
     let u_ret = await qnUplad(name, filepath);
     // 更新头像
     let userres = await user.uploadAvatar({ token: ret.token, avatar: conf.SOURCE_ADDRESS+ u_ret.key  });
-    res.json(userres);
+    res.json(userres.data);
   }).catch(err => {
     res.send(resSend(err));
   })
 });
+// 文件/图片上传
+router.post('/file', any, async function (req, res, next) {
+  if (!req.files.length) {
+    res.json(resSend({ code: -1, message: '没有文件资源' }))
+    return void 0;
+  };
+  let headers = req.headers;
+  let token = headers._token;
+  parseToken({ token }).then(async ret => {
+    let { _id } = ret.token;
+    let SOURCE_PATH = conf.SOURCE_PATH;
+    // 文件名
+    let name = SOURCE_PATH + req.files[0].originalname;
+    // 文件路径
+    let filepath = req.files[0].path;
+    // 上传七牛
+    let u_ret = await qnUplad(name, filepath);
+    console.log(u_ret, 'u_ret')
+    u_ret.src = conf.SOURCE_ADDRESS+ u_ret.key;
+    // // 更新头像
+    // let userres = await user.uploadAvatar({ token: ret.token, avatar: conf.SOURCE_ADDRESS + u_ret.key });
+    res.json(u_ret);
+  }).catch(err => {
+    res.send(resSend(err));
+  })
+});
+
+
 
 
 module.exports = router;

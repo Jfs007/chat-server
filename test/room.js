@@ -46,12 +46,12 @@ const { getRoomUsers, getRoomInfo } = require('../controllers/room');
 // })
 
 
-saveRoomHistory({
-  token: {
-    _id: '5b4ac722f56100c80497002e'
-  },
-  roomid: '5b62670e22e34d1706506ae0',
-  content: '第n条消息1。。。。'
-}).then(ret => {
-  console.log(ret, 'ret')
-})
+// saveRoomHistory({
+//   token: {
+//     _id: '5b4ac722f56100c80497002e'
+//   },
+//   roomid: '5b62670e22e34d1706506ae0',
+//   content: '第n条消息1。。。。'
+// }).then(ret => {
+//   console.log(ret, 'ret')
+// })

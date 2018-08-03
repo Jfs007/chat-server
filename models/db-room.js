@@ -27,6 +27,10 @@ const room = new Schema({
   avatar: {
     type: String,
     default: SOURCE_ADDRESS + AVATAR_PATH + 'avatar5' + '.png'
+  },
+  recentlyActive: {
+    type: Date,
+    default: new Date()
   }
 
 });
