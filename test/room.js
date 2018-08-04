@@ -22,16 +22,16 @@ const { getRoomUsers, getRoomInfo } = require('../controllers/room');
 // });
 
 
-// User.find({}).then(res => {
-//   res.map(user => {
-//     RoomMember.create({
-//       user: user._id,
-//       room: '5b62670e22e34d1706506ae0',
-//       timestamp: Date.now(),
-//       intoGroupAt: new Date()
-//     });
-//   })
-// })
+User.find({}).then(res => {
+  res.map(user => {
+    RoomMember.create({
+      user: user._id,
+      room: '5b62670e22e34d1706506ae0',
+      timestamp: Date.now(),
+      intoGroupAt: new Date()
+    });
+  })
+})
 // getRoomUsers({
 //   roomid: '5b62670e22e34d1706506ae0'
 // }).then(ret => {
