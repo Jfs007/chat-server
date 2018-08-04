@@ -7,6 +7,7 @@ const room = new Schema({
     require: true
   },
   inviteLink: String,
+  roomNo:String, 
   users: [{
     type: Schema.Types.ObjectId,
     ref: 'user'

@@ -15,7 +15,7 @@ const roommember = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'room'
   },
-  // 成员类型  普通人 0 群主 1 管理员 2
+  // 成员类型  普通人 0  管理员 1 群主 2
   memberClass: {
     type: Number,
     default: 0

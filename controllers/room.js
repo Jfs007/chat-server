@@ -40,16 +40,26 @@ module.exports = {
       data: rooms
     })
   },
+  
   async getRoomUsers(info) {
-    let { roomid } = info;
+    let { roomid, limit } = info;
+    
+    let total = 0;
     let roomUsers = await RoomMember.find({
       room: roomid
+    }, null, {
+        sort: '-memberClass'
     }).populate({
       path: 'user'
-    });
-    return resSend({
-      data: roomUsers
+    }).then((ret) => {
+      total = ret.length;
+      if(!limit) return ret;
+      return ret.slice(0, limit)
     })
+    return resSend({
+      data: 
+        { roomUsers, total }
+      })
   },
   
 }

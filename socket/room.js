@@ -16,6 +16,15 @@ module.exports = function (socket) {
       cb(resSend(err));
     })
   });
+  socket.on('getRoomUsers', (info, cb) => {
+    parseToken(info).then(async info => {
+      let rs = await room.getRoomUsers(info);
+      cb(rs);
+    }).catch(err => {
+      cb(resSend(err));
+    })
+  });
+  
   // 接受房间消息
   socket.on('roomMessage', (info, cb) => {
     parseToken(info).then(async info => {
