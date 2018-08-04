@@ -8,7 +8,7 @@ module.exports = {
   // 七牛头像样式
   QN_AVATAR_STYLE: 'imageMogr2/auto-orient/thumbnail/640x640!/gravity/Center/crop/640x640/blur/1x0/quality/77|imageslim',
   NORMAL_ROOM: {
-    NAME: '风继续吹',
+    NAME: '风继续吹-测试1群',
     
   }
 };

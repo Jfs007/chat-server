@@ -57,7 +57,7 @@ router.post('/file', any, async function (req, res, next) {
     let filepath = req.files[0].path;
     // 上传七牛
     let u_ret = await qnUplad(name, filepath);
-    console.log(u_ret, 'u_ret')
+    console.log(req.files[0])
     u_ret.src = conf.SOURCE_ADDRESS+ u_ret.key;
     // // 更新头像
     // let userres = await user.uploadAvatar({ token: ret.token, avatar: conf.SOURCE_ADDRESS + u_ret.key });

@@ -18,6 +18,7 @@ module.exports = {
     if(isMatch) {
       let exp = Math.floor((new Date().getTime()) / 1000) + 30*3600;
       let verify = jwt.sign({ user: user.account, exp: exp, _id: user._id }, JWT_KEY);
+      console.log('.............', user, '.....')
       return resSend({ data: { token: verify, _id: user._id } });
     }else {
       return resSend({message: '密码或者用户名错误', code: -1});

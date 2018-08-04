@@ -25,6 +25,7 @@ module.exports = function(socket) {
   });
   // 用户下线
   socket.on('offline', async (info, cb) => {
+    console.log('offline')
     try {
       let rs = await online.offLine({ socket });
       cb(rs);

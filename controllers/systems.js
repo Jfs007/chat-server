@@ -5,7 +5,11 @@ const Room = require('../models/db-room');
 const User =require('../models/db-user');
 const room = require('./room');
 const { resSend } = require('../util/misc');
-const RoomHistory = require('../models/db-roomhistory')
+
+const RoomHistory = require('../models/db-roomhistory');
+
+const conf = require('../conf/common-conf')
+
 module.exports = {
   // 好友同意通知
   async friendAgreeNotice(info, socket) {
@@ -42,12 +46,17 @@ module.exports = {
   async joinPresetRoom(userid, socket) {
     let [tRoom, tUser] = await Promise.all([
       Room.findOne({
-        name: '风继续吹'
+        name: conf.NORMAL_ROOM.NAME
       }),
       User.findOne({
         _id: userid
       })
     ]);
+    if(!tRoom) {
+      tRoom = await Room.create({
+        name: conf.NORMAL_ROOM.NAME
+      })
+    }
     let roomid = tRoom._id;
     // 如果在了不再加入
     if (tUser.rooms.includes(''+roomid)) return resSend();
