@@ -5,7 +5,7 @@ let qnUplad = require('../util/qn_upload');
 let conf = require('../conf/common-conf');
 let user = require('../controllers/user');
 let { parseToken, resSend } = require('../util/misc')
-
+let { unlink } = require('../util/file');
 
 var multer = require('multer');
 var upload = multer({ dest: 'tmp/image' })
@@ -35,6 +35,7 @@ router.post('/avatar', any, async function (req, res, next) {
     let u_ret = await qnUplad(name, filepath);
     // 更新头像
     let userres = await user.uploadAvatar({ token: ret.token, avatar: conf.SOURCE_ADDRESS+ u_ret.key  });
+    unlink(filepath);
     res.json(userres.data);
   }).catch(err => {
     res.send(resSend(err));
@@ -50,15 +51,17 @@ router.post('/file', any, async function (req, res, next) {
   let token = headers._token;
   parseToken({ token }).then(async ret => {
     let { _id } = ret.token;
+    let uploadFile = req.files[0];
     let SOURCE_PATH = conf.SOURCE_PATH;
     // 文件名
-    let name = SOURCE_PATH + req.files[0].originalname;
+    let name = SOURCE_PATH + uploadFile.originalname;
     // 文件路径
-    let filepath = req.files[0].path;
+    let filepath = uploadFile.path;
     // 上传七牛
     let u_ret = await qnUplad(name, filepath);
-    console.log(req.files[0])
     u_ret.src = conf.SOURCE_ADDRESS+ u_ret.key;
+    // 上传完毕删除本地临时文件
+    unlink(filepath);
     // // 更新头像
     // let userres = await user.uploadAvatar({ token: ret.token, avatar: conf.SOURCE_ADDRESS + u_ret.key });
     res.json(u_ret);
