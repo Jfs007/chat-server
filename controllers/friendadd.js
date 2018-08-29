@@ -112,7 +112,6 @@ module.exports = {
     let friendadd = await FriendAdd.findOne({
       _id: id
     })
-    console.log(friendadd, '...')
     // 返回好友添加请求表的id，，客户端可以根据id更新列表
     return resSend({ data: { id, from: friendadd.addPeople, to: friendadd.creater } });
   },

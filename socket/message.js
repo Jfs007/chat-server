@@ -7,6 +7,7 @@ module.exports = function(socket) {
   // 获取某个房间私聊消息记录
   socket.on('getPrivateMsg', (info, cb) => {
     parseToken(info).then(async info => {
+      
       let rs = await private.getPrivateList(info);
       cb(rs);
     }).catch(err => {
@@ -43,6 +44,9 @@ module.exports = function(socket) {
     parseToken(info).then(async info => {
       let to = info.to;
       let rs = await private.savePrivateMsg(info);
+      // 查询当前用户信息
+      // 获取最新消息
+      // private.getPrivateInfo(info);
       // 发送消息到用户 
       socket.to(to).emit('message.private', rs);
       cb(rs);

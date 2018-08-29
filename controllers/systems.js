@@ -59,7 +59,7 @@ module.exports = {
     }
     let roomid = tRoom._id;
     // 如果在了不再加入
-    if (tUser.rooms.indexOf(+roomid)> -1) {
+    if (tUser.rooms.indexOf(''+roomid)> -1) {
       return resSend()
     };
     let rs = await room.joinRoom({

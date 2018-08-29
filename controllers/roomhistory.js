@@ -22,6 +22,7 @@ module.exports =  {
     ]);
     history = history.toObject();
     history.creater = user;
+    history.fromId = roomid;
     // ObjectId
     // history.roomid = roomid;
     return resSend({data: history});

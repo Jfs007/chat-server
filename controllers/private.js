@@ -61,6 +61,8 @@ module.exports = {
         timestamp: Date.now()
       }),
     ]);
+    fromMsg = fromMsg.toObject();
+    fromMsg.fromId = fromMsg.creater;
     // 判断是否创建
     return resSend({ data: fromMsg });
   },
@@ -105,14 +107,17 @@ module.exports = {
     // // 'avatar nickname _id ' 
     // )
 
-    let frined = await Friend.findOne({
+    let friend = await Friend.findOne({
       owner: userid,
       friend: id
     }).populate({
       path: 'friend'
     });
+    friend = friend.toObject();
+    let friendInfo = friend.friend;
+    let fromInfo = { ...friendInfo, remarkname: friend.remarkname  };
     return resSend({
-      data: frined
+      data: fromInfo
     })
   },
   async getUnReadPrivate(info) {
